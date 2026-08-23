@@ -16,7 +16,7 @@
       <header>
         <p class="eyebrow">GÜNLÜK PLANLAYICI</p>
         <div class="heading-row">
-          <div><h1>Görevlerim</h1><p id="summary">Bugün için harika bir plan yap.</p></div>
+          <div class="brand"><span class="logo-mark" aria-hidden="true"><span>✓</span></span><div><h1>Görevlerim</h1><p id="summary">Bugün için harika bir plan yap.</p></div></div>
           <button id="theme-button" class="icon-button" aria-label="Tema değiştir">◐</button>
         </div>
       </header>
@@ -36,7 +36,13 @@
         <button class="filter active" data-filter="all">Tümü</button><button class="filter" data-filter="today">Bugün</button><button class="filter" data-filter="overdue">Geciken</button><button class="filter" data-filter="active">Yapılacak</button><button class="filter" data-filter="completed">Tamamlanan</button>
       </nav>
 
+      <section class="achievements" aria-label="Rozetlerim">
+        <div class="section-heading"><h2>Rozetlerim</h2><span id="badge-progress"></span></div>
+        <div id="badge-list" class="badge-list"></div>
+      </section>
+
       <section aria-live="polite"><ul id="task-list" class="task-list"></ul><div id="empty-state" class="empty-state card" hidden><span>✓</span><h2>Burada henüz görev yok</h2><p>İlk görevini yukarıdan ekleyerek başlayabilirsin.</p></div></section>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
       <footer>
         <button id="export-button" class="text-button">Yedekle</button>
         <label class="text-button restore-label" for="import-input">Geri yükle</label><input id="import-input" type="file" accept="application/json" hidden />

@@ -7,13 +7,41 @@ const categoryInput = document.querySelector("#task-category");
 const priorityInput = document.querySelector("#task-priority");
 const dateInput = document.querySelector("#task-date");
 const summary = document.querySelector("#summary");
+const badgeList = document.querySelector("#badge-list");
+const badgeProgress = document.querySelector("#badge-progress");
+const toast = document.querySelector("#toast");
 let filter = "all";
 let tasks = JSON.parse(localStorage.getItem(storageKey) || localStorage.getItem(oldStorageKey) || "[]");
+let completedTotal = Number(localStorage.getItem("gorevlerim-completed-total")) || tasks.filter(task => task.done).length;
 
 const priorityNames = { low: "Düşük", medium: "Orta", high: "Yüksek" };
 const categoryNames = { personal: "Kişisel", school: "Okul", work: "İş", other: "Diğer" };
+const achievements = [
+  { count: 1, icon: "🌱", name: "İlk Adım", text: "1 görev" },
+  { count: 3, icon: "⚡", name: "İş Bitirici", text: "3 görev" },
+  { count: 10, icon: "🚀", name: "Görev Makinesi", text: "10 görev" },
+  { count: 25, icon: "👑", name: "Efsane", text: "25 görev" },
+];
 const save = () => localStorage.setItem(storageKey, JSON.stringify(tasks));
 const dayKey = () => new Date().toLocaleDateString("en-CA");
+
+function renderBadges() {
+  badgeList.innerHTML = "";
+  achievements.forEach(badge => {
+    const item = document.createElement("div");
+    item.className = `achievement ${completedTotal >= badge.count ? "unlocked" : ""}`;
+    item.innerHTML = `<span class="achievement-icon">${badge.icon}</span><div><strong>${badge.name}</strong><small>${badge.text}</small></div>`;
+    badgeList.append(item);
+  });
+  badgeProgress.textContent = `${completedTotal} tamamlandı`;
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timeout);
+  showToast.timeout = setTimeout(() => toast.classList.remove("show"), 2800);
+}
 
 function formatDate(date) {
   if (!date) return "Tarih yok";
@@ -47,7 +75,17 @@ function render() {
     item.className = `task-item ${task.done ? "completed" : ""}`;
     item.innerHTML = `<input class="check" type="checkbox" ${task.done ? "checked" : ""} aria-label="Görevi tamamla"><div><p class="task-title"></p><div class="metadata"><span class="badge category">${categoryNames[task.category]}</span><span class="badge priority-${task.priority}">${priorityNames[task.priority]}</span><span>${formatDate(task.date)}</span></div></div><div class="task-actions"><button class="edit" aria-label="Görevi düzenle">✎</button><button class="delete" aria-label="Görevi sil">×</button></div>`;
     item.querySelector(".task-title").textContent = task.title;
-    item.querySelector(".check").addEventListener("change", () => { task.done = !task.done; save(); render(); });
+    item.querySelector(".check").addEventListener("change", () => {
+      const wasDone = task.done;
+      task.done = !task.done;
+      if (!wasDone && task.done) {
+        completedTotal += 1;
+        localStorage.setItem("gorevlerim-completed-total", completedTotal);
+        const unlocked = achievements.find(badge => badge.count === completedTotal);
+        if (unlocked) showToast(`${unlocked.icon} Rozet açıldı: ${unlocked.name}!`);
+      }
+      save(); render();
+    });
     item.querySelector(".edit").addEventListener("click", () => editTask(task));
     item.querySelector(".delete").addEventListener("click", () => { if (confirm("Bu görev silinsin mi?")) { tasks = tasks.filter(current => current.id !== task.id); save(); render(); } });
     taskList.append(item);
@@ -55,6 +93,7 @@ function render() {
   emptyState.hidden = visible.length !== 0;
   const completed = tasks.filter(task => task.done).length;
   summary.textContent = tasks.length ? `${completed} / ${tasks.length} görev tamamlandı.` : "Bugün için harika bir plan yap.";
+  renderBadges();
 }
 
 function addTask() {
