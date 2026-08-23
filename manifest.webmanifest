@@ -1,0 +1,9 @@
+{
+  "name": "Görevlerim",
+  "short_name": "Görevlerim",
+  "description": "Kişisel görev takip uygulaması",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8f7fc",
+  "theme_color": "#6750a4"
+}
