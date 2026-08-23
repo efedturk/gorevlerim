@@ -16,10 +16,7 @@
       <header>
         <p class="eyebrow">GÜNLÜK PLANLAYICI</p>
         <div class="heading-row">
-          <div>
-            <h1>Görevlerim</h1>
-            <p id="summary">Bugün için harika bir plan yap.</p>
-          </div>
+          <div><h1>Görevlerim</h1><p id="summary">Bugün için harika bir plan yap.</p></div>
           <button id="theme-button" class="icon-button" aria-label="Tema değiştir">◐</button>
         </div>
       </header>
@@ -28,32 +25,21 @@
         <label for="task-title">Yeni görev</label>
         <input id="task-title" type="text" maxlength="100" placeholder="Örn. Proje sunumunu hazırla" />
         <div class="task-options">
-          <select id="task-priority" aria-label="Öncelik">
-            <option value="low">Düşük öncelik</option>
-            <option value="medium" selected>Orta öncelik</option>
-            <option value="high">Yüksek öncelik</option>
-          </select>
+          <select id="task-category" aria-label="Kategori"><option value="personal">Kişisel</option><option value="school">Okul</option><option value="work">İş</option><option value="other">Diğer</option></select>
+          <select id="task-priority" aria-label="Öncelik"><option value="low">Düşük</option><option value="medium" selected>Orta</option><option value="high">Yüksek</option></select>
           <input id="task-date" type="date" aria-label="Son tarih" />
           <button id="add-button" class="primary-button">Ekle</button>
         </div>
       </section>
 
       <nav class="filters" aria-label="Görev filtreleri">
-        <button class="filter active" data-filter="all">Tümü</button>
-        <button class="filter" data-filter="active">Yapılacak</button>
-        <button class="filter" data-filter="completed">Tamamlanan</button>
+        <button class="filter active" data-filter="all">Tümü</button><button class="filter" data-filter="today">Bugün</button><button class="filter" data-filter="overdue">Geciken</button><button class="filter" data-filter="active">Yapılacak</button><button class="filter" data-filter="completed">Tamamlanan</button>
       </nav>
 
-      <section aria-live="polite">
-        <ul id="task-list" class="task-list"></ul>
-        <div id="empty-state" class="empty-state card" hidden>
-          <span>✓</span>
-          <h2>Burada henüz görev yok</h2>
-          <p>İlk görevini yukarıdan ekleyerek başlayabilirsin.</p>
-        </div>
-      </section>
-
+      <section aria-live="polite"><ul id="task-list" class="task-list"></ul><div id="empty-state" class="empty-state card" hidden><span>✓</span><h2>Burada henüz görev yok</h2><p>İlk görevini yukarıdan ekleyerek başlayabilirsin.</p></div></section>
       <footer>
+        <button id="export-button" class="text-button">Yedekle</button>
+        <label class="text-button restore-label" for="import-input">Geri yükle</label><input id="import-input" type="file" accept="application/json" hidden />
         <button id="clear-completed" class="text-button">Tamamlananları temizle</button>
       </footer>
     </main>
